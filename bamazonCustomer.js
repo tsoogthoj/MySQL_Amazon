@@ -30,10 +30,11 @@ function validateInput(value) {
 
 function displayInventory() {
     connection.query("SELECT * FROM products", function(err, res) {
-        if (err) throw err
+
         console.log("Welcome to ABC Store")
         console.log("These are the items we have on sale")
-        // disply the data from the table into terminal
+		// disply the data from the table into terminal
+		console.log(res)
         console.table(res)
 
         // prompt purchase
@@ -64,29 +65,27 @@ function promptUserPurchase() {
 		let quantity = input.quantity;
 
 		connection.query('SELECT * FROM products WHERE ?', {item_id: item}, function(err, data) {
-			if (err) throw err
 
 			if (data.length === 0) {
 				console.log('Invalid ID. Please select a valid ID.');
 				displayInventory();
 			} else {
-                let productData = data[0];
+                let productData = data[0]
                 
 				if (quantity <= productData.stock_quantity) {
                     console.log('The product you requested is in stock. Your order will be place.');
                     
 					connection.query('UPDATE products SET stock_quantity = ' + (productData.stock_quantity - quantity) + ' WHERE item_id = ' + item, function(err, data) {
-						if (err) throw err;
 
-						console.log('Your total will be $' + productData.price * quantity);
-                        console.log('Thank you and come again.');
+						console.log('Your total will be $' + productData.price * quantity)
+                        console.log('Thank you and come again.')
                         
 						connection.end();
 					})
 				} else {
 					console.log('Sorry, there is not enough in stock, your order can not be placed.');
-					console.log('Please change your order.');
-					displayInventory();
+					console.log('Please change your order.')
+					displayInventory()
 				}
 			}
 		})
