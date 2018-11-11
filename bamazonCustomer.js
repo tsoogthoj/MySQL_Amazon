@@ -34,7 +34,6 @@ function displayInventory() {
         console.log("Welcome to ABC Store")
         console.log("These are the items we have on sale")
 		// disply the data from the table into terminal
-		console.log(res)
         console.table(res)
 
         // prompt purchase
